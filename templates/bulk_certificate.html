@@ -9,8 +9,8 @@
             <h2 class="text-center mb-0">Bulk Certificate Generator</h2>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
                     <div class="form-section">
                         <form id="bulkCertificateForm">
                             <div class="form-group mb-4">
@@ -33,7 +33,7 @@
                                 <input type="range" class="form-range custom-range border-warning" id="fontSize" min="0.5" max="3" step="0.1" value="1.0">
                                 <small class="text-muted">Adjust text size</small>
                             </div>
-                             <div class="form-group mb-4">
+                            <div class="form-group mb-4">
                                 <label class="form-label fw-bold" style="color:#2B2B2B;">Text Position</label>
                                 <div class="row">
                                     <div class="col-6">
@@ -47,19 +47,10 @@
                                 </div>
                                 <small class="text-muted">Use sliders to adjust text position</small>
                             </div>
-
                             <div class="text-center">
                                 <button type="submit" class="btn btn-yellow btn-lg px-5 shadow">Generate Certificates</button>
                             </div>
                         </form>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="certificate-preview mb-4 rgb-border-hover bg-dark" id="certificatePreview">
-                        <div class="preview-placeholder text-center text-warning">
-                             <i class="fas fa-certificate fa-3x mb-3"></i>
-                            <p>Select a template to see preview</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -79,13 +70,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const positionXInput = document.getElementById('positionX');
     const positionYInput = document.getElementById('positionY');
     const form = document.getElementById('bulkCertificateForm');
-    const previewContainer = document.getElementById('certificatePreview');
-    const previewPlaceholder = previewContainer.querySelector('.preview-placeholder');
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
 
     // Fetch templates on page load
-    fetch('/api/templates?section={{ section }}') // Ensure correct section is passed
+    fetch('/api/templates?section={{ section }}')
         .then(response => {
             if (!response.ok) {
                 console.error(`HTTP error! status: ${response.status}`);
@@ -97,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Fetched templates:', data);
             if (data.length === 0) {
                 console.log('No templates found.');
-                // Optionally display a message to the user
             }
             data.forEach(template => {
                 const option = document.createElement('option');
@@ -110,44 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching templates:', error);
             alert('Error loading templates: ' + error.message);
         });
-
-    // Handle template selection change
-    templateSelect.addEventListener('change', function() {
-        const templateId = this.value;
-        if (templateId) {
-            // Fetch and display template image preview
-            previewPlaceholder.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x"></i><p>Loading template...</p>';
-            fetch(`/api/template/${templateId}?section={{ section }}`)
-                .then(response => {
-                     if (!response.ok) {
-                        console.error(`HTTP error! status: ${response.status}`);
-                        return response.json().then(data => { throw new Error(data.error || 'Unknown error fetching template preview'); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Fetched template preview data:', data);
-                    if (data.image_url) {
-                        previewContainer.style.backgroundImage = `url(${data.image_url})`;
-                        previewContainer.style.backgroundSize = 'contain';
-                        previewContainer.style.backgroundRepeat = 'no-repeat';
-                        previewContainer.style.backgroundPosition = 'center';
-                        previewPlaceholder.innerHTML = ''; // Clear placeholder
-                    } else {
-                         console.error('Template preview data missing image_url.', data);
-                        previewPlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle fa-3x"></i><p>Error loading template preview.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching template preview:', error);
-                    previewPlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle fa-3x"></i><p>Error loading template preview.</p>';
-                });
-        } else {
-            // Clear preview if no template is selected
-            previewContainer.style.backgroundImage = '';
-            previewPlaceholder.innerHTML = '<i class="fas fa-certificate fa-3x mb-3"></i><p>Select a template to see preview</p>';
-        }
-    });
 
     // Handle form submission
     form.addEventListener('submit', function(event) {
@@ -234,14 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
     33% { border-color: #D4D4D4; }
     66% { border-color: #2B2B2B; }
     100% { border-color: #B3B3B3; }
-}
-.certificate-preview {
-    background: #D4D4D4 !important;
-    border-radius: 12px;
-    min-height: 320px;
-    box-shadow: 0 4px 12px rgba(179, 179, 179, 0.08);
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
 }
 .custom-input, .custom-select, .custom-color, .custom-range, .form-range, .border-warning {
     border-color: #B3B3B3 !important;
