@@ -1,0 +1,32 @@
+{% extends "tools/base_tool.html" %}
+
+{% set tool_name = "PDF to Word Converter" %}
+{% set tool_description = "Convert your PDF files to editable Word documents (.docx). Fast, easy, and secure!" %}
+{% set accepted_types = ".pdf" %}
+{% set accepted_formats = "PDF" %}
+{% set upload_icon = "fas fa-file-alt" %}
+{% set conversion_type = "pdf2word" %}
+{% set output_extension = "docx" %}
+
+{% block extra_css %}
+{{ super() }}
+<style>
+.tool-animated-bg {
+    background: linear-gradient(120deg, #111 60%, #FFD60022 100%);
+    overflow: hidden;
+}
+.tool-animated-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="20" x2="80" y2="80" stroke="%23FFD600" stroke-width="6" stroke-opacity="0.10"/><line x1="100" y1="40" x2="160" y2="100" stroke="%23FFD600" stroke-width="8" stroke-opacity="0.07"/></svg>');
+    animation: float-lines 11s linear infinite alternate;
+    z-index: 0;
+}
+@keyframes float-lines {
+    0% { background-position: 0 0; }
+    100% { background-position: 30px 30px; }
+}
+</style>
+{% endblock %} 

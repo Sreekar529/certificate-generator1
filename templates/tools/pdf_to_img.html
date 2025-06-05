@@ -1,0 +1,32 @@
+{% extends "tools/base_tool.html" %}
+
+{% set tool_name = "PDF to Image Converter" %}
+{% set tool_description = "Convert your PDF documents into high-quality images. Each page will be converted into a separate image file. Fast, easy, and secure!" %}
+{% set accepted_types = ".pdf" %}
+{% set accepted_formats = "PDF" %}
+{% set upload_icon = "fas fa-file-pdf" %}
+{% set conversion_type = "pdf2img" %}
+{% set output_extension = "png" %}
+
+{% block extra_css %}
+{{ super() }}
+<style>
+.tool-animated-bg {
+    background: linear-gradient(120deg, #111 60%, #FFD60022 100%);
+    overflow: hidden;
+}
+.tool-animated-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><polygon points="40,10 70,80 10,80" fill="%23FFD600" fill-opacity="0.12"/><polygon points="90,30 120,100 60,100" fill="%23FFD600" fill-opacity="0.08"/></svg>');
+    animation: float-polygons 12s linear infinite alternate;
+    z-index: 0;
+}
+@keyframes float-polygons {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+</style>
+{% endblock %} 

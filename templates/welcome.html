@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Nova Certify{% endblock %}
+
+{% block content %}
+<div class="container-fluid welcome-section text-center py-5">
+    <div class="container">
+        <h1 class="display-4 animated-title mb-4">Nova Certify</h1>
+        <p class="lead animated-subtitle mb-4">Your go-to solution for generating professional certificates easily.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6 mb-4">
+            <div class="section-card rgb-border-hover p-4 bg-white text-light rounded shadow-lg h-100">
+                <h2 class="section-title text-center mb-4" style="color: #2B2B2B;">SVIT Exclusive</h2>
+                <div class="d-grid gap-3">
+                    <a href="/single-certificate-svit" class="btn btn-lg btn-yellow shadow">Single Certificate Generator - Exclusive</a>
+                    <a href="/bulk-certificate-svit" class="btn btn-lg btn-yellow shadow">Bulk Certificate Generator</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="section-card rgb-border-hover p-4 bg-white text-light rounded shadow-lg h-100">
+                <h2 class="section-title text-center mb-4" style="color: #2B2B2B;">General</h2>
+                <div class="d-grid gap-3">
+                    <a href="/single-certificate-general" class="btn btn-lg btn-yellow shadow">Single Certificate Generator</a>
+                    <a href="/bulk-certificate-general" class="btn btn-lg btn-yellow shadow">Bulk Certificate Generator</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+body, .bg-dark { background: #FFFFFF !important; }
+.btn-yellow {
+    background: #B3B3B3;
+    color: #2B2B2B;
+    border: none;
+    font-weight: bold;
+    transition: box-shadow 0.3s, background 0.3s;
+}
+.btn-yellow:hover {
+    background: #D4D4D4;
+    color: #2B2B2B;
+    box-shadow: 0 0 20px 2px #B3B3B3;
+}
+.rgb-border-hover {
+    border: 1px solid #B3B3B3;
+    transition: border 0.3s, box-shadow 0.3s;
+    box-shadow: none;
+}
+.rgb-border-hover:hover {
+    border-image: none;
+    border-color: #D4D4D4;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    animation: none;
+}
+
+.section-title { color: #2B2B2B; }
+
+/* Adjusted spacing and alignment */
+.welcome-section {
+    margin-bottom: 0 !important; /* Remove bottom margin if padding is used */
+}
+
+.feature-section,
+.container.py-5 {
+    margin-top: 0 !important; /* Remove top margin if padding is used */
+}
+
+.feature-card,
+.section-card {
+    margin-bottom: 1.5rem; /* Standardized bottom margin */
+}
+
+.feature-card i {
+    color: #2B2B2B; /* Dark gray for icons */
+}
+
+.feature-card h3 {
+    color: #2B2B2B; /* Dark gray for headings */
+}
+
+.feature-card p {
+    color: #555; /* Slightly lighter gray for body text */
+}
+
+.tool-card {
+    background: #E0E0E0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: #2B2B2B; /* Dark gray for tool card text */
+}
+
+.tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: #D4D4D4;
+}
+
+.tool-icon {
+    font-size: 2rem;
+    color: #2B2B2B; /* Dark gray for tool icons */
+    margin-bottom: 0.75rem;
+}
+
+/* Remove or simplify unused animations and styles */
+@keyframes rgb-border { }
+.animated-tools-bg { }
+.animated-tools-bg::before { }
+@keyframes tools-bg-move { }
+.animated-tool-card { }
+.animated-tool-card:hover { }
+.animated-icon { }
+.animated-tool-card:hover .animated-icon { }
+.tools-section { }
+.tool-header { }
+
+.animated-title,
+.animated-subtitle,
+.animated-btn,
+.animated-feature {
+    opacity: 1;
+    transform: none;
+    animation: none;
+}
+
+</style>
+{% endblock %} 

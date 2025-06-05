@@ -1,0 +1,449 @@
+:root {
+    --primary-color: #B3B3B3; /* Medium Gray */
+    --secondary-color: #FFFFFF; /* White */
+    --text-color: #2B2B2B; /* Dark Gray */
+    --border-color: #B3B3B3; /* Medium Gray */
+    --hover-color: #D4D4D4; /* Light Gray */
+    --card-background: #E0E0E0; /* Light Gray background for cards */
+    --section-background: #FFFFFF; /* White background for sections */
+    --light-gray-background: #F8F8F8; /* Very light gray for some sections */
+}
+
+/* Global Styles */
+body {
+    background-color: var(--section-background); /* White background */
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    padding-top: 0; /* Remove top padding, let sections handle it */
+    padding-bottom: 0; /* Remove bottom padding */
+}
+
+/* Navbar Styles */
+.navbar {
+    background: var(--section-background);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem 0;
+    margin-bottom: 0; /* Remove default bottom margin */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: var(--text-color) !important;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--text-color) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #2B2B2B !important;
+    transform: translateY(-2px);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item:hover {
+    background-color: var(--hover-color);
+    color: var(--secondary-color);
+}
+
+/* Card Styles */
+.custom-card {
+    background-color: var(--card-background) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    padding: 1.5rem; /* Consistent padding */
+}
+
+.custom-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+}
+
+.custom-header {
+    background: var(--primary-color) !important;
+    color: #2B2B2B !important;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 8px 8px 0 0 !important;
+    padding: 1rem 1.5rem; /* Consistent padding */
+}
+
+/* Form Controls */
+.custom-input,
+.custom-select,
+.custom-color {
+    background-color: var(--section-background) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus,
+.custom-select:focus,
+.custom-color:focus {
+    background-color: var(--card-background) !important;
+    border-color: var(--hover-color) !important;
+    box-shadow: 0 0 5px rgba(179, 179, 179, 0.2);
+}
+
+/* Range Inputs */
+.custom-range {
+    height: 8px;
+    background: rgba(179, 179, 179, 0.2);
+    border-radius: 4px;
+    outline: none;
+}
+
+.custom-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-range::-webkit-slider-thumb:hover {
+    background: var(--hover-color);
+    transform: scale(1.1);
+}
+
+/* Buttons */
+.btn-yellow {
+    background-color: var(--primary-color);
+    color: #2B2B2B;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem; /* Consistent padding */
+    border-radius: 5px; /* Slightly rounded corners */
+}
+
+.btn-yellow:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(179, 179, 179, 0.3);
+}
+
+/* Certificate Preview */
+.certificate-preview {
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--card-background);
+    position: relative;
+    margin-bottom: 1.5rem; /* Consistent spacing */
+}
+
+.preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    padding: 1.5rem; /* Consistent padding */
+    color: var(--text-color);
+}
+
+.preview-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.preview-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.preview-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 1rem;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading States */
+.loading-template {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--primary-color);
+}
+
+/* Alerts */
+.alert {
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background);
+    color: var(--text-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem; /* Consistent spacing */
+}
+
+.alert-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.alert-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Form Sections */
+.form-section {
+    padding: 1.5rem;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    color: var(--text-color);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .certificate-preview {
+        min-height: 250px;
+    }
+    
+    .preview-placeholder {
+        min-height: 250px;
+        padding: 1rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+    }
+    
+    .custom-card, .tool-card, .section-card {
+        padding: 1rem;
+        margin-bottom: 1rem; /* Reduce margin on mobile */
+    }
+    
+    .btn-yellow {
+        padding: 0.5rem 1rem;
+    }
+
+    .welcome-section, .feature-section, .tools-section, .container.py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+     .section-card {
+        margin-bottom: 1.5rem; /* Consistent spacing for section cards on mobile */
+     }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-card, .tool-card, .custom-card, .certificate-preview, .section-card {
+    /* Only animate, do not set opacity or transform by default */
+    animation: fadeIn 0.5s ease-out;
+    opacity: 1;
+    transform: none;
+}
+
+.feature-card, .tool-card, .custom-card, .certificate-preview, .section-card {
+    transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.feature-card:hover, .tool-card:hover, .custom-card:hover, .certificate-preview:hover, .section-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+    background: #D4D4D4; /* Keep dark background on hover */
+}
+.fade-in {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    transition: opacity 0.6s, transform 0.6s;
+}
+input[type=range]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Font Selection */
+.font-scroll {
+    max-height: 150px; /* Slightly increased height */
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--card-background);
+    padding-right: 5px; /* Add some padding for the scrollbar */
+}
+
+.font-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.font-scroll::-webkit-scrollbar-track {
+    background: var(--card-background);
+    border-radius: 4px;
+}
+
+.font-scroll::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* Tools Grid on Welcome Page */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted min width */
+    gap: 1.5rem; /* Increased gap */
+    padding: 1.5rem; /* Increased padding */
+}
+
+.tool-card {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem; /* Consistent padding */
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-decoration: none; /* Remove underline from link */
+    color: var(--text-color); /* Set text color */
+}
+
+.tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: var(--hover-color); /* Hover background */
+}
+
+.tool-icon {
+    font-size: 2.5rem; /* Slightly increased icon size */
+    color: var(--primary-color);
+    margin-bottom: 1rem; /* Adjusted spacing */
+}
+
+/* Welcome Page Specific Styles */
+.welcome-section {
+    background: var(--section-background);
+    color: var(--text-color);
+    padding: 4rem 0; /* Increased padding */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+.feature-section {
+    padding: 4rem 0; /* Increased padding */
+    background-color: var(--light-gray-background); /* Very light gray for contrast */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+.feature-card {
+    background: var(--card-background);
+    padding: 1.5rem; /* Consistent padding */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    transition: all 0.3s ease;
+    text-align: center; /* Center content */
+    margin-bottom: 0; /* Remove bottom margin, use column gap */
+}
+
+.feature-card i {
+    color: var(--primary-color);
+    margin-bottom: 1rem; /* Adjusted spacing */
+}
+
+.feature-card h3 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem; /* Adjusted spacing */
+}
+
+.feature-card p {
+    color: #555; /* Slightly lighter gray for body */
+}
+
+.section-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 1.5rem; /* Consistent padding */
+    margin-bottom: 0; /* Remove bottom margin, use row gap */
+}
+
+.section-title {
+    color: var(--text-color);
+    margin-bottom: 1.5rem !important; /* Adjusted spacing */
+}
+
+/* Ensure consistent spacing between sections */
+.welcome-section + .container.py-5,
+.container.py-5 + .feature-section,
+.feature-section + .tools-section {
+    margin-top: 3rem; /* Add top margin to separate sections */
+}
+
+.rgb-border-hover {
+    border: 1px solid var(--border-color);
+    transition: border 0.3s, box-shadow 0.3s;
+    box-shadow: none;
+}
+
+.rgb-border-hover:hover {
+    border-image: none;
+    border-color: var(--hover-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    animation: none;
+}
+
+/* Remove or simplify unused animations and styles */
+@keyframes rgb-border { }
+.animated-tools-bg { }
+.animated-tools-bg::before { }
+@keyframes tools-bg-move { }
+.animated-tool-card { }
+.animated-tool-card:hover { }
+.animated-icon { }
+.animated-tool-card:hover .animated-icon { }
+.tools-section { }
+.tool-header { }
+
+.animated-title,
+.animated-subtitle,
+.animated-btn,
+.animated-feature {
+    opacity: 1;
+    transform: none;
+    animation: none;
+} 

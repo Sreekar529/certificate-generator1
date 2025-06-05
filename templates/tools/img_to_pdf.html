@@ -1,0 +1,32 @@
+{% extends "tools/base_tool.html" %}
+
+{% set tool_name = "Image to PDF Converter" %}
+{% set tool_description = "Combine your images into a single PDF document. Supports JPG, PNG, and more. Fast, easy, and secure!" %}
+{% set accepted_types = ".jpg,.jpeg,.png,.bmp,.gif" %}
+{% set accepted_formats = "JPG, PNG, BMP, GIF" %}
+{% set upload_icon = "fas fa-image" %}
+{% set conversion_type = "img2pdf" %}
+{% set output_extension = "pdf" %}
+
+{% block extra_css %}
+{{ super() }}
+<style>
+.tool-animated-bg {
+    background: linear-gradient(120deg, #111 60%, #FFD60022 100%);
+    overflow: hidden;
+}
+.tool-animated-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"><ellipse cx="60" cy="40" rx="30" ry="15" fill="%23FFD600" fill-opacity="0.10"/><ellipse cx="120" cy="80" rx="40" ry="20" fill="%23FFD600" fill-opacity="0.07"/></svg>');
+    animation: float-ellipses 14s linear infinite alternate;
+    z-index: 0;
+}
+@keyframes float-ellipses {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+}
+</style>
+{% endblock %} 

@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tool_name }} - Nova Certify{% endblock %}
+
+{% block content %}
+<div class="container tool-animated-bg py-5">
+    <div class="tool-container">
+        <div class="tool-header text-center mb-5">
+            <h1 class="display-4" style="color:#FFD600;">{{ tool_name }}</h1>
+            <p class="lead text-light">{{ tool_description }}</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="tool-card tool-card-animated bg-black text-light shadow-lg p-4 rounded">
+                    <div class="upload-area animated-upload-area" id="uploadArea">
+                        <input type="file" id="fileUpload" accept="{{ accepted_types }}" class="d-none" aria-label="Upload file">
+                        <div class="upload-placeholder">
+                            <i class="{{ upload_icon }} animated-upload-icon"></i>
+                            <p>Click to upload file</p>
+                            <small class="text-muted">Accepted formats: {{ accepted_formats }}</small>
+                        </div>
+                    </div>
+                    <div class="progress-container mt-4 d-none" id="progressContainer">
+                        <div class="progress bg-dark" style="height:1.5rem; border-radius:0.75rem;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark" 
+                                 role="progressbar" 
+                                 aria-valuenow="0" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        <p class="text-center mt-2 text-warning" id="progressText">Converting...</p>
+                        <div class="spinner-border text-warning mt-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="result-container mt-4 d-none" id="resultContainer">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="resultMessage">Conversion completed successfully!</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" class="btn btn-yellow" id="downloadBtn">
+                                <i class="fas fa-download me-2"></i>Download Result
+                            </a>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger mt-3 d-none" id="errorAlert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="errorMessage">Invalid file format. Please upload a valid file.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+body, .bg-black { background: #111 !important; }
+.tool-animated-bg {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(120deg, #111 60%, #FFD60022 100%);
+    overflow: hidden;
+}
+.tool-animated-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: repeating-linear-gradient(135deg, #FFD60022 0 2px, transparent 2px 40px);
+    animation: tools-bg-move 8s linear infinite;
+    z-index: 0;
+}
+@keyframes tools-bg-move {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(40px,40px); }
+}
+.tool-header { margin-bottom: 3rem; }
+.tool-card-animated {
+    position: relative;
+    z-index: 1;
+    border: 3px solid #FFD600;
+    transition: border 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 0 0 #FFD600;
+}
+.tool-card-animated:hover {
+    border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1;
+    box-shadow: 0 0 20px 2px #FFD600, 0 0 40px 4px #FFD60033;
+    animation: rgb-border 2s linear infinite;
+}
+@keyframes rgb-border {
+    0% { border-color: #FFD600; }
+    20% { border-color: #ff0000; }
+    40% { border-color: #00ff00; }
+    60% { border-color: #0000ff; }
+    80% { border-color: #FFD600; }
+    100% { border-color: #FFD600; }
+}
+.animated-upload-area {
+    border: 2px dashed #FFD600;
+    border-radius: 10px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    background: #222;
+    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+}
+.animated-upload-area:hover {
+    border-color: #FFD600;
+    background: #1a1a1a;
+    box-shadow: 0 0 24px 4px #FFD60055;
+}
+.animated-upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #FFD600;
+    transition: text-shadow 0.4s, transform 0.4s;
+}
+.animated-upload-area:hover .animated-upload-icon {
+    text-shadow: 0 0 16px #FFD600, 0 0 32px #FFD60099;
+    transform: scale(1.15) rotate(-8deg);
+}
+.upload-placeholder { color: #FFD600; }
+.progress-bar { background-color: #FFD600 !important; color: #111 !important; }
+.result-container { animation: fadeIn 0.5s ease; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.btn-yellow {
+    background: #FFD600;
+    color: #111;
+    border: none;
+    font-weight: bold;
+    transition: box-shadow 0.3s, background 0.3s;
+}
+.btn-yellow:hover {
+    background: #fff700;
+    color: #111;
+    box-shadow: 0 0 20px 2px #FFD600;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileUpload = document.getElementById('fileUpload');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = progressContainer.querySelector('.progress-bar');
+    const progressText = document.getElementById('progressText');
+    const resultContainer = document.getElementById('resultContainer');
+    const resultMessage = document.getElementById('resultMessage');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Handle file upload
+    uploadArea.addEventListener('click', () => fileUpload.click());
+    fileUpload.addEventListener('change', handleFileUpload);
+
+    function handleFileUpload(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            const fileType = file.name.split('.').pop().toLowerCase();
+            const acceptedTypes = '{{ accepted_types }}'.split(',');
+            if (!acceptedTypes.includes('.' + fileType)) {
+                errorMessage.textContent = 'Invalid file format. Please upload a valid file.';
+                errorAlert.classList.remove('d-none');
+                return;
+            }
+            errorAlert.classList.add('d-none');
+            // Show progress
+            progressContainer.classList.remove('d-none');
+            resultContainer.classList.add('d-none');
+            
+            // Simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                progressBar.setAttribute('aria-valuenow', progress);
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        // Show result
+                        progressContainer.classList.add('d-none');
+                        resultContainer.classList.remove('d-none');
+                        
+                        // Handle file conversion
+                        convertFile(file);
+                    }, 500);
+                }
+            }, 100);
+        }
+    }
+
+    function convertFile(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', '{{ conversion_type }}');
+
+        fetch('/api/convert', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            downloadBtn.href = url;
+            downloadBtn.download = `converted_${file.name.split('.')[0]}.{{ output_extension }}`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultMessage.textContent = 'Error converting file. Please try again.';
+            resultContainer.querySelector('.alert').classList.remove('alert-success');
+            resultContainer.querySelector('.alert').classList.add('alert-danger');
+        });
+    }
+});
+</script>
+{% endblock %} 

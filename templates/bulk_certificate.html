@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Certificate Generator{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card custom-card rgb-border-hover bg-black text-light">
+        <div class="card-header custom-header" style="background: #B3B3B3; color: #2B2B2B;">
+            <h2 class="text-center mb-0">Bulk Certificate Generator</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <form id="bulkCertificateForm">
+                            <div class="form-group mb-4">
+                                <label for="template" class="form-label fw-bold" style="color:#2B2B2B;">Select Template</label>
+                                <select class="form-control form-control-lg custom-select bg-dark text-light border-warning" id="template" name="template_id" required>
+                                    <option value="">Choose a template...</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="excelFile" class="form-label fw-bold" style="color:#2B2B2B;">Upload Excel File (CSV)</label>
+                                <input type="file" class="form-control-file form-control-lg custom-input bg-dark text-light border-warning" id="excelFile" name="excel_file" accept=".csv" required>
+                                <small class="form-text text-muted">Upload a CSV file with a 'Name' column.</small>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="fontColor" class="form-label fw-bold" style="color:#2B2B2B;">Text Color</label>
+                                <input type="color" class="form-control form-control-lg custom-color border-warning" id="fontColor" value="#2B2B2B">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="fontSize" class="form-label fw-bold" style="color:#2B2B2B;">Font Size</label>
+                                <input type="range" class="form-range custom-range border-warning" id="fontSize" min="0.5" max="3" step="0.1" value="1.0">
+                                <small class="text-muted">Adjust text size</small>
+                            </div>
+                             <div class="form-group mb-4">
+                                <label class="form-label fw-bold" style="color:#2B2B2B;">Text Position</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="positionX" class="form-label">Horizontal</label>
+                                        <input type="range" class="form-range border-warning" id="positionX" min="-400" max="400" value="0">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="positionY" class="form-label">Vertical</label>
+                                        <input type="range" class="form-range border-warning" id="positionY" min="-300" max="300" value="0">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Use sliders to adjust text position</small>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-yellow btn-lg px-5 shadow">Generate Certificates</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="certificate-preview mb-4 rgb-border-hover bg-dark" id="certificatePreview">
+                        <div class="preview-placeholder text-center text-warning">
+                             <i class="fas fa-certificate fa-3x mb-3"></i>
+                            <p>Select a template to see preview</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const templateSelect = document.getElementById('template');
+    const excelFileInput = document.getElementById('excelFile');
+    const fontColorInput = document.getElementById('fontColor');
+    const fontSizeInput = document.getElementById('fontSize');
+    const positionXInput = document.getElementById('positionX');
+    const positionYInput = document.getElementById('positionY');
+    const form = document.getElementById('bulkCertificateForm');
+    const previewContainer = document.getElementById('certificatePreview');
+    const previewPlaceholder = previewContainer.querySelector('.preview-placeholder');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+
+    // Fetch templates on page load
+    fetch('/api/templates?section={{ section }}') // Ensure correct section is passed
+        .then(response => {
+            if (!response.ok) {
+                console.error(`HTTP error! status: ${response.status}`);
+                return response.json().then(data => { throw new Error(data.error || 'Unknown error fetching templates'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched templates:', data);
+            if (data.length === 0) {
+                console.log('No templates found.');
+                // Optionally display a message to the user
+            }
+            data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.id;
+                option.textContent = template.name;
+                templateSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching templates:', error);
+            alert('Error loading templates: ' + error.message);
+        });
+
+    // Handle template selection change
+    templateSelect.addEventListener('change', function() {
+        const templateId = this.value;
+        if (templateId) {
+            // Fetch and display template image preview
+            previewPlaceholder.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x"></i><p>Loading template...</p>';
+            fetch(`/api/template/${templateId}?section={{ section }}`)
+                .then(response => {
+                     if (!response.ok) {
+                        console.error(`HTTP error! status: ${response.status}`);
+                        return response.json().then(data => { throw new Error(data.error || 'Unknown error fetching template preview'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched template preview data:', data);
+                    if (data.image_url) {
+                        previewContainer.style.backgroundImage = `url(${data.image_url})`;
+                        previewContainer.style.backgroundSize = 'contain';
+                        previewContainer.style.backgroundRepeat = 'no-repeat';
+                        previewContainer.style.backgroundPosition = 'center';
+                        previewPlaceholder.innerHTML = ''; // Clear placeholder
+                    } else {
+                         console.error('Template preview data missing image_url.', data);
+                        previewPlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle fa-3x"></i><p>Error loading template preview.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching template preview:', error);
+                    previewPlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle fa-3x"></i><p>Error loading template preview.</p>';
+                });
+        } else {
+            // Clear preview if no template is selected
+            previewContainer.style.backgroundImage = '';
+            previewPlaceholder.innerHTML = '<i class="fas fa-certificate fa-3x mb-3"></i><p>Select a template to see preview</p>';
+        }
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const templateId = templateSelect.value;
+        const fontColor = fontColorInput.value;
+        const fontSize = fontSizeInput.value;
+        const positionX = positionXInput.value;
+        const positionY = positionYInput.value;
+
+        formData.append('font_color', fontColor);
+        formData.append('font_size', fontSize);
+        formData.append('position_x', positionX);
+        formData.append('position_y', positionY);
+
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+
+        fetch(`/generate-bulk/${templateId}`, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw new Error(data.error || 'Unknown error'); });
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'certificates.zip';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            alert('Certificates generated and download should start shortly.');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error generating certificates: ' + error.message);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalText;
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.bg-black { background: #D4D4D4 !important; }
+.text-light { color: #2B2B2B !important; }
+.text-warning { color: #2B2B2B !important; }
+.btn-yellow {
+    background: #B3B3B3;
+    color: #2B2B2B;
+    border: none;
+    font-weight: bold;
+    transition: box-shadow 0.3s, background 0.3s;
+}
+.btn-yellow:hover {
+    background: #D4D4D4;
+    color: #2B2B2B;
+    box-shadow: 0 0 20px 2px #B3B3B3;
+}
+.rgb-border-hover {
+    border: 3px solid #B3B3B3;
+    transition: border 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 0 0 #B3B3B3;
+}
+.rgb-border-hover:hover {
+    border-image: linear-gradient(90deg, #D4D4D4, #B3B3B3, #2B2B2B) 1;
+    box-shadow: 0 0 20px 2px #B3B3B3, 0 0 40px 4px #B3B3B333;
+    animation: rgb-border 2s linear infinite;
+}
+@keyframes rgb-border {
+    0% { border-color: #B3B3B3; }
+    33% { border-color: #D4D4D4; }
+    66% { border-color: #2B2B2B; }
+    100% { border-color: #B3B3B3; }
+}
+.certificate-preview {
+    background: #D4D4D4 !important;
+    border-radius: 12px;
+    min-height: 320px;
+    box-shadow: 0 4px 12px rgba(179, 179, 179, 0.08);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+.custom-input, .custom-select, .custom-color, .custom-range, .form-range, .border-warning {
+    border-color: #B3B3B3 !important;
+    background: #D4D4D4 !important;
+    color: #2B2B2B !important;
+}
+.custom-input:focus, .custom-select:focus {
+    border-color: #D4D4D4 !important;
+    box-shadow: 0 0 0 0.2rem #B3B3B355 !important;
+}
+</style>
+{% endblock %} 
